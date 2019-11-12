@@ -1,7 +1,7 @@
 CC = /usr/bin/g++
 
 #OPENGL LIBS FOR LINUX
-GLLIB :=  -lGL -lGLEW -lGLU -lglut
+GLLIB :=  -lGL  -lGLU -lglut
 #OPENGL LIBS FOR MAC
 #GLLIB := -framework OpenGL -framework GLUT
 

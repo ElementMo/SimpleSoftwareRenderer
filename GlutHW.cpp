@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 #include <cassert>
+#include  <cmath>
 #include <GL/glut.h>
 using namespace std;
 
@@ -145,7 +146,7 @@ void mouse_move(int x, int y) {
 vector<Button*> shader_btns;
 vector<Button*> model_btns;
 int shaderActiveBtn = 0;
-int modelActiveBtn = 1;
+int modelActiveBtn = 2;
 
 void initUI() {
 	//  --------- Add Elements in UI ---------------
@@ -1304,7 +1305,7 @@ void myTimerFunc(int) {
 	timer += 0.1;
 }
 
-void main(int argc, char** argv) {
+int main(int argc, char** argv) {
 	// Setup Window
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
@@ -1327,33 +1328,37 @@ void main(int argc, char** argv) {
 	cube_yz = new Zone(model, 2);
 
 
-	// model = new Model("bunny.txt");
-	// for (int i = 0; i < model->geos.size(); i++) {
-	// 	model->geos[i].sortFaces(0);
-	// 	model->geos[i].calcNormals();
-	// }
-	// bunny_xy = new Zone(model, 0);
-	// bunny_xz = new Zone(model, 1);
-	// bunny_yz = new Zone(model, 2);
+	model = new Model("bunny.txt");
+	for (int i = 0; i < model->geos.size(); i++) {
+		model->geos[i].sortFaces(0);
+		model->geos[i].calcNormals();
+	}
+	bunny_xy = new Zone(model, 0);
+	bunny_xz = new Zone(model, 1);
+	bunny_yz = new Zone(model, 2);
 
 
-	// model = new Model("Beethoven.txt");
-	// for (int i = 0; i < model->geos.size(); i++) {
-	// 	model->geos[i].sortFaces(0);
-	// 	model->geos[i].calcNormals();
-	// }
-	// ven_xy = new Zone(model, 0);
-	// ven_xz = new Zone(model, 1);
-	// ven_yz = new Zone(model, 2);
+	model = new Model("Beethoven.txt");
+	for (int i = 0; i < model->geos.size(); i++) {
+		model->geos[i].sortFaces(0);
+		model->geos[i].calcNormals();
+	}
+	ven_xy = new Zone(model, 0);
+	ven_xz = new Zone(model, 1);
+	ven_yz = new Zone(model, 2);
 
 
 
 	glutDisplayFunc(myDisplay);
+
 	//glutTimerFunc(0, myTimerFunc, 0);
+
 	glutMouseFunc(mouse_hit);
 	glutPassiveMotionFunc(mouse_move);
 
 	glutMainLoop();
+
+	return 0;
 }
 
 IShader::~IShader()
