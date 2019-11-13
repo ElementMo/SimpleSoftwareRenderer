@@ -5,13 +5,13 @@
 #include <sstream>
 #include <vector>
 #include <cassert>
-#include  <cmath>
+#include <cmath>
 #include <GL/glut.h>
 using namespace std;
 
 // -------------- parameters -------------- 
-const int width = 800;
-const int height = 800;
+const int width = 700;
+const int height = 700;
 float timer = 0;
 
 int mousehitX, mousehitY;
@@ -24,6 +24,9 @@ bool hasDrawn = false;
 int frameBufferR[width][height] = { 0 };
 int frameBufferG[width][height] = { 0 };
 int frameBufferB[width][height] = { 0 };
+
+vector<bool> btnStates;
+
 
 
 // -------------- Mouse IO -------------------
@@ -114,16 +117,18 @@ void mouse_hit(int button, int state, int x, int y) {
 
 		}
 		else if (state == GLUT_UP) {
+			for (int i=0; i< btnStates.size(); i++){
+				if(btnStates[i] == true){
+					cout << ">>>>>>>>>>>>  Processing Data...  <<<<<<<<<<<" << endl;
+					glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+					glClearColor(0, 0, 0, 1);
+					memset(frameBufferR, 0, sizeof(frameBufferR));
+					memset(frameBufferG, 0, sizeof(frameBufferG));
+					memset(frameBufferB, 0, sizeof(frameBufferB));
+					hasDrawn = false;
+				}
+			}
 			mousePressed = false;
-
-			cout << ">>>>>>>>>>>>  Processing Data...  <<<<<<<<<<<" << endl;
-
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glClearColor(0, 0, 0, 1);
-			memset(frameBufferR, 0, sizeof(frameBufferR));
-			memset(frameBufferG, 0, sizeof(frameBufferG));
-			memset(frameBufferB, 0, sizeof(frameBufferB));
-			hasDrawn = false;
 		}
 		break;
 
@@ -146,7 +151,7 @@ void mouse_move(int x, int y) {
 vector<Button*> shader_btns;
 vector<Button*> model_btns;
 int shaderActiveBtn = 0;
-int modelActiveBtn = 2;
+int modelActiveBtn = 0;
 
 void initUI() {
 	//  --------- Add Elements in UI ---------------
@@ -165,6 +170,17 @@ void initUI() {
 	model_btns.push_back(bunny);
 	model_btns.push_back(cube);
 	model_btns.push_back(ven);
+
+	for(int i=0; i<7; i++){
+		btnStates.push_back(false);
+		btnStates.push_back(false);
+		btnStates.push_back(false);
+		btnStates.push_back(false);
+		btnStates.push_back(false);
+		btnStates.push_back(false);
+		btnStates.push_back(false);
+	}
+
 }
 
 
@@ -1277,16 +1293,25 @@ void myDisplay() {
 
 
 	// ---------------- Draw UI ---------------------------
-	for (int i = 0; i < shader_btns.size(); i++) {
-		shader_btns[i]->drawBtn();
-		if (shader_btns[i]->state == PRESSED) {
-			shaderActiveBtn = i;
+	for (int b=0; b < btnStates.size(); b++) {
+		for (int i = 0; i < shader_btns.size(); i++) {
+			shader_btns[i]->drawBtn();
+			if (shader_btns[i]->state == PRESSED) {
+				shaderActiveBtn = i;
+				btnStates[i] = true;
+			}else{
+				btnStates[i] = false;
+			}
 		}
-	}
-	for (int i = 0; i < model_btns.size(); i++) {
-		model_btns[i]->drawBtn();
-		if (model_btns[i]->state == PRESSED) {
-			modelActiveBtn = i;
+		for (int i = 0; i < model_btns.size(); i++) {
+			model_btns[i]->drawBtn();
+			if (model_btns[i]->state == PRESSED) {
+				modelActiveBtn = i;
+				btnStates[i+shader_btns.size()] = true;
+			}
+			else{
+				btnStates[i+shader_btns.size()] = false;
+			}
 		}
 	}
 
@@ -1310,7 +1335,7 @@ int main(int argc, char** argv) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(width, height);
-	glutInitWindowPosition(0, 0);
+	glutInitWindowPosition(400, 50);
 	glutCreateWindow("GlutHW");
 
 
