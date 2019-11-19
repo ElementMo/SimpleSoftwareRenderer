@@ -45,11 +45,3 @@ frac(float v)
 saturate(float x)
 smoothstep(float a, float b, float x)
 circle(Vertex _st, float _radius)
-
-// I have left lots of history code in the file, they are just for testing and I didn't want to delete them (because I love them).
-
-For Extra credits:
-1. I created Beethoven.txt from a Processing library called HE_Mesh.
-2. I display models in multiple viewports.
-3. I created one more shader: "Toon Shader", and it looks cool
-4. I created a interactive UI, there are 3 states of the UI: Idle, Hover, Pressed. And the color of the button changes according to its states.
